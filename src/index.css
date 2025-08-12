@@ -39,20 +39,23 @@ All colors MUST be HSL.
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Brand tokens */
+    --brand: 255 85% 60%; /* indigo-violet */
+    --brand-glow: 265 85% 70%;
+    --brand-foreground: 210 40% 98%;
+    --surface: 220 40% 99%;
+
+    /* Shadows & motion */
+    --shadow-elegant: 0 10px 30px -10px hsl(var(--brand)/0.25);
+    --shadow-glow: 0 0 32px hsl(var(--brand-glow)/0.35);
   }
 
   .dark {
@@ -91,8 +94,17 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --brand: 264 85% 65%;
+    --brand-glow: 275 85% 70%;
+    --brand-foreground: 210 40% 98%;
+    --surface: 222 84% 6%;
+
+    --shadow-elegant: 0 10px 30px -10px hsl(var(--brand)/0.3);
+    --shadow-glow: 0 0 40px hsl(var(--brand-glow)/0.45);
   }
 }
+
 
 @layer base {
   * {
@@ -102,4 +114,9 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@layer utilities {
+  .shadow-elegant { box-shadow: var(--shadow-elegant); }
+  .shadow-glow { box-shadow: var(--shadow-glow); }
 }
