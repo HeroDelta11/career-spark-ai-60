@@ -6,12 +6,20 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { invokeFunction } from "@/lib/edge-functions";
+import { updateMetrics } from "@/lib/metrics";
 
 const Analyze = () => {
   const [resume, setResume] = useState("");
   const [job, setJob] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
+
+  const parseScore = (text: string) => {
+    const m = text.match(/Score:\s*(\d{1,3})/i);
+    const n = m ? parseInt(m[1], 10) : NaN;
+    if (Number.isNaN(n)) return undefined;
+    return Math.max(0, Math.min(100, n));
+  };
 
   const onAnalyze = async () => {
     if (!resume || !job) {
@@ -26,7 +34,10 @@ const Analyze = () => {
       toast({ title: "Error", description: error.message });
       return;
     }
-    setResult(data?.text ?? "No response");
+    const txt = data?.text ?? "No response";
+    setResult(txt);
+    const score = parseScore(txt);
+    updateMetrics({ lastAnalyzeAt: Date.now(), ...(score !== undefined ? { resumeScore: score } : {}) });
   };
 
   return (

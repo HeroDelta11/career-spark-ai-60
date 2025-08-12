@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { invokeFunction } from "@/lib/edge-functions";
+import { incrementCoverLetters } from "@/lib/metrics";
 
 const CoverLetter = () => {
   const [resume, setResume] = useState("");
@@ -30,6 +31,7 @@ const CoverLetter = () => {
       return;
     }
     setResult(data?.text ?? "No response");
+    incrementCoverLetters();
   };
 
   const copy = async () => {

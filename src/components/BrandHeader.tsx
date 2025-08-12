@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const BrandHeader = () => {
   return (
@@ -10,10 +11,12 @@ const BrandHeader = () => {
           <span className="text-lg font-semibold tracking-tight">AI Career Coach</span>
         </Link>
         <div className="flex items-center gap-2">
+          <Link to="/dashboard"><Button variant="secondary" size="sm">Dashboard</Button></Link>
           <Link to="/analyze"><Button variant="secondary" size="sm">Analyze</Button></Link>
           <Link to="/interview"><Button variant="secondary" size="sm">Interview</Button></Link>
           <Link to="/cover-letter"><Button size="sm">Cover Letter</Button></Link>
           <Link to="/auth"><Button variant="outline" size="sm">Sign in</Button></Link>
+          <ThemeToggle />
         </div>
       </nav>
     </header>

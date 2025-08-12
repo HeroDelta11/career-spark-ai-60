@@ -7,13 +7,14 @@ import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 const MODEL = "gemini-1.5-flash";
 
 interface AnalyzeBody {
-  mode: "analyze" | "interview_review" | "cover_letter";
+  mode: "analyze" | "interview_review" | "cover_letter" | "interview_questions";
   resume?: string;
   job?: string;
   question?: string;
   answer?: string;
   company?: string;
   tone?: string;
+  level?: string;
 }
 
 const corsHeaders = {
@@ -70,14 +71,13 @@ serve(async (req) => {
 function buildPrompt(b: AnalyzeBody): string {
   switch (b.mode) {
     case "analyze":
-      return `You are an expert career coach. Analyze the following resume against the job description. Output sections: Summary, Keyword Match (top keywords found/missing), Skill Gaps, Bullet Improvements (rewrite 3 bullets with measurable impact), ATS Tips.
-Resume:\n${b.resume}\n\nJob Description:\n${b.job}`;
+      return `You are an expert career coach. Analyze the following resume against the job description. Output sections: Summary, Keyword Match (top keywords found/missing), Skill Gaps, Bullet Improvements (rewrite 3 bullets with measurable impact), ATS Tips.\nAt the end, add a line exactly as: Score: NN (where NN is an integer 0-100).\nResume:\n${b.resume}\n\nJob Description:\n${b.job}`;
     case "interview_review":
-      return `You are an interview coach. Review the candidate's answer${b.question ? ` to: ${b.question}` : ""}. Provide: Strengths, Specific Improvements, Suggested Structure (STAR), and a Polished Version.
-Answer:\n${b.answer}`;
+      return `You are an interview coach. Review the candidate's answer${b.question ? ` to: ${b.question}` : ""}. Provide: Strengths, Specific Improvements, Suggested Structure (STAR), and a Polished Version.\nAnswer:\n${b.answer}`;
     case "cover_letter":
-      return `Write a concise, tailored cover letter in a ${b.tone ?? "professional"} tone for ${b.company || "the company"}. Base it on the resume and job description. Keep under 350 words. Use clear paragraphs and a strong closing.
-Resume:\n${b.resume}\n\nJob Description:\n${b.job}`;
+      return `Write a concise, tailored cover letter in a ${b.tone ?? "professional"} tone for ${b.company || "the company"}. Base it on the resume and job description. Keep under 350 words. Use clear paragraphs and a strong closing.\nResume:\n${b.resume}\n\nJob Description:\n${b.job}`;
+    case "interview_questions":
+      return `You are a hiring manager creating interview questions. Based on the following job description and seniority level (${b.level ?? "mid"}), generate 8 comprehensive interview questions balanced across categories: Behavioral, Technical, Role-specific, and Culture/Collaboration. Tailor difficulty to the level. Output as a clear bulleted list grouped by category.\nJob Description:\n${b.job}`;
     default:
       return "";
   }
