@@ -1,6 +1,6 @@
 export async function invokeFunction<T = any>(name: string, body: any): Promise<{ data?: T; error?: { message: string } }>{
   try {
-    const res = await fetch(`/functions/v1/${name}`, {
+    const res = await fetch(`https://mremnrlyylwwxueobmil.supabase.co/functions/v1/${name}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
